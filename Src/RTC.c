@@ -8,15 +8,7 @@ uint8_t data[256];
 uint16_t size;
 uint8_t readBuf[7];
 
-char* days[] = {
-   "Sun",
-   "Mon",
-   "Tue",
-   "Wed",
-   "Thr",
-   "Fri",
-   "Sat"
-};
+char* days[] = { "Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat" };
 
 uint8_t RTC_ConvertFromDec(uint8_t c) {
 	uint8_t ch = ((c >> 4) * 10 + (0x0F & c));
@@ -63,26 +55,24 @@ void I2C_ReadCalendarData(I2C_HandleTypeDef hi, uint8_t DEV_ADDR) {
 	}
 }
 
-char * readSeconds() {
-	static char sec[2];
-	uint8_t tempVal = readBuf[0];
+char * readTwoBytesAt(int addr) {
+	static char res[2];
+	uint8_t tempVal = readBuf[addr];
 	tempVal = RTC_ConvertFromDec(tempVal);
-	sprintf(sec, "%c%c", ((tempVal / 10) % 10) + 0x30, (tempVal % 10) + 0x30);
-	return sec;
+	sprintf(res, "%c%c", ((tempVal / 10) % 10) + 0x30, (tempVal % 10) + 0x30);
+	return res;
+}
+
+char * readSeconds() {
+	return readTwoBytesAt(0);
 }
 
 char * readMinutes() {
-	static char min[2];
-	uint8_t tempVal = RTC_ConvertFromDec(readBuf[1]);
-	sprintf(min, "%c%c", ((tempVal / 10) % 10) + 0x30, (tempVal % 10) + 0x30);
-	return min;
+	return readTwoBytesAt(1);
 }
 
 char * readHours() {
-	static char hour[2];
-	uint8_t tempVal = RTC_ConvertFromDec(readBuf[2]);
-	sprintf(hour, "%c%c", ((tempVal / 10) % 10) + 0x30, (tempVal % 10) + 0x30);
-	return hour;
+	return readTwoBytesAt(2);
 }
 
 char * readDay() {
@@ -93,22 +83,13 @@ char * readDay() {
 }
 
 char * readDate() {
-	static char date[2];
-	uint8_t tempVal = RTC_ConvertFromDec(readBuf[4]);
-	sprintf(date, "%c%c", ((tempVal / 10) % 10) + 0x30, (tempVal % 10) + 0x30);
-	return date;
+	return readTwoBytesAt(4);
 }
 
 char * readMonth() {
-	static char month[2];
-	uint8_t tempVal = RTC_ConvertFromDec(readBuf[5]);
-	sprintf(month, "%c%c", ((tempVal / 10) % 10) + 0x30, (tempVal % 10) + 0x30);
-	return month;
+	return readTwoBytesAt(5);
 }
 
 char * readYear() {
-	static char year[2];
-	uint8_t tempVal = RTC_ConvertFromDec(readBuf[6]);
-	sprintf(year, "%c%c", ((tempVal / 10) % 10) + 0x30, (tempVal % 10) + 0x30);
-	return year;
+	return readTwoBytesAt(6);
 }
