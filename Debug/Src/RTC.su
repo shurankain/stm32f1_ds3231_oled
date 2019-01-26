@@ -1,0 +1,12 @@
+RTC.c:21:9:RTC_ConvertFromDec	0	static
+RTC.c:26:9:RTC_ConvertFromBinDec	0	static
+RTC.c:32:6:I2C_WriteBuffer	48	static
+RTC.c:44:11:I2C_ReadRawData	32	static
+RTC.c:56:6:I2C_ReadCalendarData	40	static
+RTC.c:66:8:readSeconds	8	static
+RTC.c:74:8:readMinutes	8	static
+RTC.c:81:8:readHours	8	static
+RTC.c:88:8:readDay	8	static
+RTC.c:95:8:readDate	8	static
+RTC.c:102:8:readMonth	8	static
+RTC.c:109:8:readYear	8	static
