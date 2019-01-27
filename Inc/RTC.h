@@ -1,6 +1,8 @@
 #ifndef RTC_H_
 #define RTC_H_
 
+#include "stm32f1xx_hal.h"
+
 /* Registers location */
 #define DS3231_CONTROL				0
 #define DS3231_SECONDS				1
@@ -10,19 +12,6 @@
 #define DS3231_DATE					5
 #define DS3231_MONTH				6
 #define DS3231_YEAR					7
-
-
-#include "stm32f1xx_hal.h"
-//char* days[] = {
-//   "Sun",
-//   "Mon",
-//   "Tue",
-//   "Wed",
-//   "Thu",
-//   "Fri",
-//   "Sat"
-//};
-
 
 uint8_t RTC_ConvertFromDec(uint8_t c);
 uint8_t RTC_ConvertFromBinDec(uint8_t c);
@@ -38,5 +27,15 @@ char * readDay();
 char * readDate();
 char * readMonth();
 char * readYear();
+
+void setSeconds(uint8_t sec);
+void setMinutes(uint8_t min);
+void setHour(uint8_t hour);
+void setDay(uint8_t day);
+void setDate(uint8_t date);
+void setMonth(uint8_t month);
+void setYear(uint8_t year);
+
+uint8_t readIntSeconds();
 
 #endif /* RTC_H_ */

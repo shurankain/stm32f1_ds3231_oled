@@ -43,6 +43,8 @@
 #include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
+#include <string.h>
+#include <stdlib.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -121,8 +123,13 @@ int main(void) {
 	/* USER CODE BEGIN WHILE */
 	uint8_t dc3231Addr = (uint8_t) 0xD0;
 
+	DS3231_sendData(hi2c1, dc3231Addr); //Передадим адрес устройству
+	while (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY) {
+	}
+	//Read
+	I2C_ReadCalendarData(hi2c1, dc3231Addr); //—читаем 7 байт с устройства
 	//set date
-	//DS3231_setDate(hi2c1, dc3231Addr);
+	DS3231_setDate(hi2c1, dc3231Addr); //call to update set data
 	//Write
 
 	while (1) {
@@ -137,48 +144,26 @@ int main(void) {
 
 		ssd1306_SetCursor(0, 0);
 		ssd1306_WriteString(readDate(), Font_11x18, White);
-		ssd1306_SetCursor(22, 0);
 		ssd1306_WriteString(":", Font_11x18, White);
-
-		ssd1306_SetCursor(33, 0);
 		ssd1306_WriteString(readMonth(), Font_11x18, White);
-		ssd1306_SetCursor(55, 0);
 		ssd1306_WriteString(":", Font_11x18, White);
-
-		ssd1306_SetCursor(66, 0);
+		ssd1306_WriteString("20", Font_11x18, White);
 		ssd1306_WriteString(readYear(), Font_11x18, White);
-		ssd1306_SetCursor(88, 0);
-		ssd1306_WriteString(":", Font_11x18, White);
-
-		ssd1306_SetCursor(99, 0);
-		ssd1306_WriteString(readDay(), Font_11x18, White);
 
 		ssd1306_SetCursor(0, 18);
 		ssd1306_WriteString(readHours(), Font_11x18, White);
-		ssd1306_SetCursor(22, 18);
 		ssd1306_WriteString(":", Font_11x18, White);
-
-		ssd1306_SetCursor(33, 18);
 		ssd1306_WriteString(readMinutes(), Font_11x18, White);
-		ssd1306_SetCursor(55, 18);
 		ssd1306_WriteString(":", Font_11x18, White);
-
-		ssd1306_SetCursor(66, 18);
 		ssd1306_WriteString(readSeconds(), Font_11x18, White);
+
+		ssd1306_SetCursor(0, 36);
+		//		char* full_text;
+		//		full_text= malloc(5+strlen(readDay())+1);
+		//		strcpy(full_text, "Day: ");
+		//		strcat(full_text, readDay());
+		ssd1306_WriteString(readDay(), Font_11x18, White);
 		ssd1306_UpdateScreen();
-//
-//		LCD_SetPos(0, 0);
-//		LCD_SendChar((char) ((i / 100) % 10) + 0x30);
-//		LCD_SendChar((char) ((i / 10) % 10) + 0x30);
-//		LCD_SendChar((char) (i % 10) + 0x30);
-//		LCD_SetPos(6, 2);
-//		LCD_SendChar((char) (((i + 500) / 100) % 10) + 0x30);
-//		LCD_SendChar((char) (((i + 500) / 10) % 10) + 0x30);
-//		LCD_SendChar((char) ((i + 500) % 10) + 0x30);
-//		LCD_SetPos(9, 3);
-//		LCD_SendChar((char) (((i + 750) / 100) % 10) + 0x30);
-//		LCD_SendChar((char) (((i + 750) / 10) % 10) + 0x30);
-//		LCD_SendChar((char) ((i + 750) % 10) + 0x30);
 		HAL_Delay(100);
 	}
 	/* USER CODE END 3 */
